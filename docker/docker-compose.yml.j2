@@ -1,0 +1,49 @@
+version: '2'
+volumes:
+  microservices:
+    external: true
+    driver: rancher-nfs
+  dpkeys:
+    external: true
+    driver: rancher-nfs
+services:
+  {{ container }}:
+    image: mobiletech/aspnetcore:2.0
+    environment:
+      MODULE_COMMAND: {{ MODULE_COMMAND }}
+      USER_MONGODB_HOST: {{ USER_MONGODB_HOST | default('mongo') }}
+      USER_MONGODB_PORT: {{ USER_MONGODB_PORT | default('27017') }}
+      USER_MONGODB_DATABASE_NAME: {{ USER_MONGODB_DATABASE_NAME | default('o2ocrm_users') }}
+      COMPANY_MONGODB_HOST: {{ COMPANY_MONGODB_HOST | default('mongo') }}
+      COMPANY_MONGODB_PORT: {{ COMPANY_MONGODB_PORT | default('27017') }}
+      COMPANY_MONGODB_DATABASE_NAME: {{ COMPANY_MONGODB_DATABASE_NAME | default('o2ocrm_companies') }}
+      JOB_MONGODB_HOST: {{ JOB_MONGODB_HOST | default('mongo') }}
+      JOB_MONGODB_PORT: {{ JOB_MONGODB_PORT | default('27017') }}
+      JOB_MONGODB_DATABASE_NAME: {{ JOB_MONGODB_DATABASE_NAME | default('o2ocrm_jobs') }}
+      IS_SERVER: {{ IS_SERVER | default('gtmjs.com') }}
+      ES_HOST: {{ ES_HOST | default('es') }}
+      ES_PORT: {{ ES_PORT | default('9200') }}
+      REDIS_HOST: {{ REDIS_HOST | default('redis')}}
+      REDIS_PORT: {{ REDIS_PORT | default('6379')}}
+      LOADBALANCER: {{ LOADBALANCER | default('loadbalancer') }}
+      RABBITMQ_HOST: {{ RABBITMQ_HOST | default('rabbitmq') }}
+      RABBITMQ_USERNAME: {{ RABBITMQ_USERNAME }}
+      RABBITMQ_PASSWORD: {{ RABBITMQ_PASSWORD }}
+      MONGODB_USERNAME: {{ MONGODB_USERNAME }}
+      MONGODB_PASSWORD: {{ MONGODB_PASSWORD }}
+    stdin_open: true
+    working_dir: "/var/www/microservices/{{ module_name }}/releases/{{ ansistrano_release_version }}"
+    external_links:
+    - mongodb/mongos:mongo
+    - es-cluster/es-client:es
+    - redis/master:redis
+    - load-balancer/frontend-lb:loadbalancer
+    - rabbitmq-3/rabbitmq:rabbitmq
+    volumes:
+    - microservices:/var/www/microservices
+    - /etc/localtime:/etc/localtime:ro
+    - dpkeys:/var/dpkeys
+    tty: true
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label: web=1

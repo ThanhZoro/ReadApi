@@ -1,0 +1,38 @@
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5004/",
+      "sslPort": 44360
+    }
+  },
+  "profiles": {
+    "ReadApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "LOADBALANCER": "google.com",
+        "COMPANY_MONGODB_HOST": "localhost",
+        "USER_MONGODB_HOST": "localhost",
+        "COMPANY_MONGODB_DATABASE_NAME": "db_companies",
+        "ES_PORT": "9200",
+        "REDIS_HOST": "localhost",
+        "REDIS_PORT": "6379",
+        "RABBITMQ_PASSWORD": "guest",
+        "USER_MONGODB_DATABASE_NAME": "db_users",
+        "ES_HOST": "localhost",
+        "COMPANY_MONGODB_PORT": "27017",
+        "USER_MONGODB_PORT": "27017",
+        "RABBITMQ_USERNAME": "guest",
+        "IS_SERVER": "http://localhost:5000",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "RABBITMQ_HOST": "localhost",
+        "APP_DOMAIN": "localhost:7017",
+        "MONGODB_USERNAME": "root",
+        "MONGODB_PASSWORD": "123456"
+      },
+      "applicationUrl": "http://localhost:5004/"
+    }
+  }
+}
